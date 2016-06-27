@@ -18,7 +18,13 @@
   <tbody>
     @foreach($jogos as $j)
       <tr>
-        <td><span class="{{ ($j->liberado == 0) ? 'glyphicon glyphicon-lock' : 'glyphicon glyphicon-ok-sign' }}" title='dewfefew'></span></td>
+        <td>
+          @if($j->liberado == 0)
+            <div class="label label-danger"><span class="glyphicon glyphicon-lock" title="Palpite Bloqueado (dependente do bloqueio geral)"></span></div>
+          @else
+            <div class="label label-success"><span class="glyphicon glyphicon-ok-sign" title="Palpite Liberado (dependente do bloqueio geral)"></span></div>
+          @endif
+        </td>
         <td>{{ date('d/m/Y', strtotime($j->data_jogo)) }} - {{ $j->hora_jogo }}</td>
         <td align="right">{{ $j->mandante }}</td>
         <td><input type="number" name="pMandante{{$j->id}}" min="0" max="10" value="{{$j->placar1}}" style="text-align:center"></td>

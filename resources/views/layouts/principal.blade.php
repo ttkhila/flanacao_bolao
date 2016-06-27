@@ -28,6 +28,8 @@
 
             <li><a href="/classificacao">Classificação</a></li>
 
+            <li><a href="/usuarios/gerencia">Usuários</a></li>
+
           </ul>
         </div>
       </nav>

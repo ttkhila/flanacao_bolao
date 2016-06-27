@@ -11,6 +11,7 @@
 |
 */
 
+//JOGOS
 Route::get('/', 'JogoController@classificacao');
 Route::get('/jogos/resultados', 'JogoController@lista');
 Route::get('/jogos/resultados/salvar', 'JogoController@salvar_resultados');
@@ -26,6 +27,11 @@ Route::get('/jogos/palpites/salvar', 'JogoController@salvarPalpites');
 Route::get('/jogos/calcula', 'JogoController@calcularPontuacoes');
 
 Route::get('/classificacao', 'JogoController@classificacao');
+
+//USUARIOS
+Route::get('/usuarios/gerencia', 'UsuarioController@lista');
+Route::get('/usuarios/aprovacao', 'UsuarioController@aprovar');
+Route::get('/usuarios/ativa/{u}/{f}', 'UsuarioController@ativar')->where(['u' => '[0-9]+', 'f' => '[0-1]+']);
 
 Route::get('/jogos', 'JogoController@palpites');
 

@@ -129,6 +129,23 @@ $(function(){
     });
   })
 
+  $("a[name^='btn-aprova']").click(function(){
+    btn = $(this);
+    valor = btn.data('valor');
+    id = btn.attr('name').split('_')[1];
+    var pars = { v: valor, i: id };
+
+    $.ajax({
+        type: 'GET',
+        url: '/usuarios/aprovacao',
+        data: pars,
+        success: function(data){
+          alert(data);
+          btn.parent().parent('tr').remove();
+        }
+    });
+  });
+
 
 
 
