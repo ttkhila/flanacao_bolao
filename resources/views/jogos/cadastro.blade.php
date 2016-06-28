@@ -2,7 +2,7 @@
 
 @section('conteudo')
 <h2>Cadastramento de Jogos</h2>
-<div class="panel panel-default">
+<div class="panel panel-primary">
   <div class="panel-heading">
     <h3 class="panel-title">Formulário de Cadastro</h3>
   </div>
@@ -65,7 +65,7 @@
   </div>
 </div>
 
-<div class="panel panel-primary">
+<div class="panel panel-success">
   <div class="panel-heading">
     <h3 class="panel-title">Lista de Jogos Cadastrados</h3>
   </div>

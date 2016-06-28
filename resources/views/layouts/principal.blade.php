@@ -26,6 +26,8 @@
               </ul>
             </li>
 
+            <li><a href="/times/cadastro">Times</a></li>
+
             <li><a href="/classificacao">Classificação</a></li>
 
             <li><a href="/usuarios/gerencia">Usuários</a></li>

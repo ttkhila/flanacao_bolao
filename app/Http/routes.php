@@ -27,16 +27,19 @@ Route::get('/jogos/palpites/salvar', 'JogoController@salvarPalpites');
 Route::get('/jogos/calcula', 'JogoController@calcularPontuacoes');
 
 Route::get('/classificacao', 'JogoController@classificacao');
+Route::get('/jogos', 'JogoController@palpites');
 
 //USUARIOS
 Route::get('/usuarios/gerencia', 'UsuarioController@lista');
 Route::get('/usuarios/aprovacao', 'UsuarioController@aprovar');
 Route::get('/usuarios/ativa/{u}/{f}', 'UsuarioController@ativar')->where(['u' => '[0-9]+', 'f' => '[0-1]+']);
 
-Route::get('/jogos', 'JogoController@palpites');
+//TIMES
+Route::get('/times/cadastro', 'TimeController@lista');
+Route::post('/times/upload', 'TimeController@uploadFiles');
 
 //Route::get('home', 'HomeController@index');
-Route::controllers([
+Route::controllers([	
   'auth' => 'Auth\AuthController',
   'password' => 'Auth\PasswordController',
 ]);
