@@ -2,6 +2,7 @@
 
 @section('conteudo')
 <h2>Gerenciar Usuários</h2>
+<div class="row">
 <div class="panel panel-warning">
   <div class="panel-heading">
     <h3 class="panel-title">Usuários Pendentes de Aprovação</h3>
@@ -99,5 +100,5 @@
     @endif
   </div>
 </div>
-
+</div>
 @stop

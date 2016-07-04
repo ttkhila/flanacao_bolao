@@ -16,52 +16,62 @@
   </head>
   <body>
     <div class="container">
-      <nav class="navbar navbar-default">
+      <nav class="navbar navbar-default navbar-static-top">
         <div class="container-fluid">
           <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#flanacao-navbar-collapse">
+              <span class="sr-only">Toggle Navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+
             <a class="navbar-brand" href="/" style="font-size:x-large;">
-              Bolão grupo Fla-Nação (whatsApp)
+              Bolão Fla-Nação
             </a>
           </div>
-          <ul class="nav navbar-nav navbar-right">
 
-            @if (Auth::guest())
-              <li><a href="/classificacao">Classificação</a></li>
-              <li><a href="{{ url('/login') }}">Login</a></li>
-              <li><a href="{{ url('/register') }}">Registrar-se</a></li>
-            @else
-              @if (Auth::user()->adm == 1)
-                <li role="presentation" class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    Jogos <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a href="/jogos/resultados">Lançar Resultados</a></li>
-                    <li><a href="/jogos/cadastro">Cadastro de Jogos</a></li>
-                    <li><a href="/jogos/lista-palpites">Efetuar Palpites</a></li>
-                    <li><a href="/jogos/bloqueio">Bloquear/Desbloquear Palpites</a></li>
-                  </ul>
-                </li>
+          <div class="collapse navbar-collapse" id="flanacao-navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
 
-                <li role="presentation" class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                  Cadastros <span class="caret"></span>
-                  </a>
-                  <ul class="dropdown-menu">
-                    <li><a href="/times/cadastro">Times</a></li>
-                    <li><a href="/usuarios/gerencia">Usuários</a></li>
-                    <li><a href="/campeonatos/gerencia">Campeonatos</a></li>
-                  </ul>
-                </li> 
+              @if (Auth::guest())
                 <li><a href="/classificacao">Classificação</a></li>
+                <li><a href="{{ url('/login') }}">Login</a></li>
+                <li><a href="{{ url('/register') }}">Registrar-se</a></li>
               @else
-                <li><a href="/classificacao">Classificação</a></li>
-                <li><a href="/jogos/lista-palpites">Efetuar Palpites</a></li>
+                @if (Auth::user()->adm == 1)
+                  <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                      Jogos <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/jogos/resultados">Lançar Resultados</a></li>
+                      <li><a href="/jogos/cadastro">Cadastro de Jogos</a></li>
+                      <li><a href="/jogos/lista-palpites">Efetuar Palpites</a></li>
+                      <li><a href="/jogos/bloqueio">Bloquear/Desbloquear Palpites</a></li>
+                    </ul>
+                  </li>
+
+                  <li role="presentation" class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    Cadastros <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                      <li><a href="/times/cadastro">Times</a></li>
+                      <li><a href="/usuarios/gerencia">Usuários</a></li>
+                      <li><a href="/campeonatos/gerencia">Campeonatos</a></li>
+                    </ul>
+                  </li> 
+                  <li><a href="/classificacao">Classificação</a></li>
+                @else
+                  <li><a href="/classificacao">Classificação</a></li>
+                  <li><a href="/jogos/lista-palpites">Efetuar Palpites</a></li>
+                @endif
+                <li style="color:#f00;"><a href="">Usuário:<br /> {{Auth::user()->login}}</a></li>
+                <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
               @endif
-              <li style="color:#f00;"><a href="">Usuário:<br /> {{Auth::user()->login}}</a></li>
-              <li><a href="{{ url('/logout') }}"><i class="fa fa-btn fa-sign-out"></i>Logout</a></li>
-            @endif
-          </ul>
+            </ul>
+          </div>
         </div>
       </nav>
       @yield('conteudo')

@@ -178,9 +178,12 @@ class JogoController extends Controller {
     
     $jogos = DB::select("SELECT j.*, t1.nome as mandante, t1.arquivo as escudo1, t2.nome as visitante, t2.arquivo as escudo2, p.palpite_mandante, p.palpite_visitante  
       FROM jogos j, times t1, times t2, palpites p  
-      WHERE (t1.id = j.time1_id) AND (t2.id = j.time2_id) AND (j.liberado = 1) AND (p.jogo_id = j.id) AND (p.usuario_id = $user)");
+      WHERE (t1.id = j.time1_id) AND (t2.id = j.time2_id) AND (j.liberado = 1) AND (p.jogo_id = j.id) AND (p.usuario_id = $user) ORDER BY j.data_jogo");
 
-    return view('jogos.palpites')->withJogos($jogos);
+    //palpites efetuados para o jogo atual
+    $pal = DB::select("SELECT p.*, u.login FROM palpites p, users u, jogos j WHERE j.data_jogo = (SELECT min(data_jogo) FROM jogos WHERE liberado = 1) AND (p.usuario_id = u.id) AND (j.id = p.jogo_id) AND (p.palpite_mandante >= 0) ORDER BY j.data_jogo ASC, u.login");
+
+    return view('jogos.palpites')->with(['jogos' => $jogos, 'pal' => $pal]);
   }
 
 // ******************************************************************

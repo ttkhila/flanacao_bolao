@@ -117,9 +117,7 @@ $(function(){
         data: pars,
         success: function(data){
           if (data == "1") {
-            $("#alert"+jogo)
-              .html("Salvo!")
-              .fadeIn('slow');
+            alert('Jogo Salvo!');
           } else if (data == "0") {
             alert('Palpites bloqueados.')
             window.location = '/';
@@ -128,6 +126,13 @@ $(function(){
         }
     });
   })
+
+  // Ver palpites de outros jogadores
+  $("button[name='verPalpites']").click(function(){
+    $("tr[name='tr-outros-palpites']").slideToggle('slow');
+    //$("tr[name='tr-outros-palpites']").css('display', 'table-row');
+  });
+  
 
   //Aprovar cadastro
   $("a[name^='btn-aprova']").click(function(){

@@ -21,6 +21,7 @@
       </tr>
     </thead>
     <tbody>
+      <?php $cont = 1; ?>
       @foreach($jogos as $j)
         <tr>
           <td>{{ date('d/m/Y', strtotime($j->data_jogo)) }}</td>
@@ -34,9 +35,28 @@
           <td>{{ $j->visitante }}</td>
           <td>
             <button name="palpiteJogo_{{$j->id}}" class="btn btn-sm btn-primary">Salvar</button>
-            <span id="alert{{$j->id}}" class="label label-danger" style="display:none;"></span>
+            @if($cont == 1 AND !empty($pal))
+              <button name="verPalpites" class="btn btn-sm btn-success">Outros palpites</button>
+            @endif
           </td>
         </tr>
+
+        @if($cont == 1 AND !empty($pal))
+          <tr name="tr-outros-palpites" style="display:none;">
+            <td colspan="10">
+              @foreach($pal as $p)
+                <span class="sp-inline">{{ $p->login }}</span>
+                {{ $j->mandante }}
+                <strong>{{ $p->palpite_mandante }}</strong>
+                 x 
+                <strong>{{ $p->palpite_visitante }}</strong>
+                {{ $j->visitante }}<br />  
+              @endforeach
+              <br /> <br /> 
+            </td>
+          </tr>
+        @endif
+        <?php $cont++; ?>
       @endforeach
     </tbody>
   </table>

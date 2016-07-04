@@ -15,8 +15,8 @@ class UsuarioController extends Controller {
     if (\Auth::user()->adm != 1) // não é ADM
       return redirect('/classificacao');
 
-    $usu_pend = DB::select("Select * FROM users WHERE inscricao_liberada = 0");
-    $usu_total = DB::select("Select * FROM users");
+    $usu_pend = DB::select("Select * FROM users WHERE inscricao_liberada = 0 ORDER BY login");
+    $usu_total = DB::select("Select * FROM users ORDER BY login");
 
     return view('usuarios.gerencia')->with(['usu_pend' => $usu_pend, 'usu_total' => $usu_total]);
   }
