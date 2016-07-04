@@ -22,3 +22,27 @@ footer.footer {
 footer.footer p {
   padding: 10px;
 }
+
+tr.fla:nth-child(even){
+  background-color:#fff;
+  color:#666;
+  font-size: small;
+  border:solid 2px #999;
+}
+tr.fla:nth-child(odd){
+  background-color:#dadada;
+  color:#333;
+  font-size: small;
+  border:solid 2px #666;
+}
+
+tr.fla1{
+  background-color:#000;
+  color:#f00;
+  border:solid 2px #fff;
+}
+tr.fla2{
+  background-color:#f00;
+  color:#000;
+  border:solid 2px #fff;
+}

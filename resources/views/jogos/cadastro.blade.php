@@ -14,7 +14,11 @@
         <label>Time Mandante</label>
         <select class="form-control" name="mandante">
           @foreach($times as $t)
-            <option value="{{$t->id}}" {{ ($t->id == 1) ? "selected='selected'" : "" }}>{{$t->nome}}</option>
+            @if(old('mandante') AND $t->id == old('mandante'))
+              <option value="{{old('mandante')}}" selected='selected'>{{$t->nome}}</option>
+            @else
+              <option value="{{$t->id}}" {{ ($t->id == 1) ? "selected='selected'" : "" }}>{{$t->nome}}</option>
+            @endif
           @endforeach
         </select>
       </div>
@@ -23,7 +27,11 @@
         <label>Time Visitante</label>
         <select class="form-control" name="visitante">
           @foreach($times as $t)
-            <option value="{{$t->id}}" {{ ($t->id == 1) ? "selected='selected'" : "" }}>{{$t->nome}}</option>
+            @if(old('visitante') AND $t->id == old('visitante'))
+              <option value="{{old('visitante')}}" selected='selected'>{{$t->nome}}</option>
+            @else
+              <option value="{{$t->id}}" {{ ($t->id == 1) ? "selected='selected'" : "" }}>{{$t->nome}}</option>
+            @endif
           @endforeach
         </select>
       </div>
@@ -31,22 +39,26 @@
       <div class="form-group">
         <label>Campeonato</label>
         <select class="form-control" name="campeonato" required>
-            <option value="0" selected="selected"></option>
+            <option value="0"></option>
           @foreach($campeonatos as $c)
-            <option value="{{$c->id}}">{{$c->nome}}</option>
+            @if(old('campeonato') AND $c->id == old('campeonato'))
+              <option value="{{old('campeonato')}}" selected="selected">{{$c->nome}}</option>
+            @else
+              <option value="{{$c->id}}">{{$c->nome}}</option>
+            @endif
           @endforeach
         </select>
       </div>
 
       <div class="form-group">
         <label>Data do jogo</label>
-        <input class="form-control" type="date" name="data_jogo" required>
+        <input class="form-control" type="date" name="data_jogo" value="{{ old('data_jogo') }}" required>
       </div>
 
       <div class="form-group">
         <label>Hora do jogo</label><br />
-        <input type="number" name="hora_jogo1" min="0" max="23"> hs 
-        <input type="number" name="hora_jogo2" min="00" max="59"> min
+        <input type="number" name="hora_jogo1" min="0" max="23" value="{{ old('hora_jogo1') }}"> hs 
+        <input type="number" name="hora_jogo2" min="00" max="59" value="{{ old('hora_jogo2') }}"> min
       </div>
 
       <button class="btn btn-primary form-control" type="submit">Cadastrar</button><br /><br />
@@ -88,7 +100,7 @@
       </thead>
       <tbody>
         @foreach($jogos as $j)
-        <tr style="background-color:{{($j->liberado == 0) ? '#ff8080;' : '#adebad;'}}">
+        <tr class="{{($j->liberado == 0) ? 'danger' : 'success'}}">
           <td>{{ date('d/m/Y', strtotime($j->data_jogo)) }}</td>
           <td>{{ $j->hora_jogo }} hs</td>
           <td align="right">{{ $j->mandante }}</td>

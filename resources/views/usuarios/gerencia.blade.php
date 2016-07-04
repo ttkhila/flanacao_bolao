@@ -47,19 +47,23 @@
         <div class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span> Não há usuários cadastrados</div>
       </center>
     @else
-      <table class="table table-striped table-responsive">
+      <h4>
+        <span class="label label-success">Usuários ativos.</span>
+        <span class="label label-danger">Usuários inativos.</span>
+      </h4>
+      <table class="table table-responsive">
         <thead>
           <tr>
             <th width="15%">Apelido</th>
             <th width="28%">Nome</th>
             <th width="12%">Celular</th>
             <th width="25%">E-mail</th>
-            <th width="20%">Ação</th>
+            <th width="20%" colspan="2">Ação</th>
           </tr>
         </thead>
         <tbody>
           @foreach($usu_total as $u2)
-            <tr>
+            <tr class="{{($u2->active == 0) ? 'danger' : 'success'}}">
               <td>{{ $u2->login }}</td>
               <td>{{ $u2->name }}</td>
               <td>{{ $u2->cell }}</td>
@@ -71,6 +75,23 @@
                   <a role="button" class="btn-sm btn-success" href="/usuarios/ativa/{{$u2->id}}/1">Ativar</a>
                 @endif
               </td>
+              <td>
+                <button class="btn-xs btn-primary" name="btn-pontos_{{$u2->id}}">Lançar Pontos</button>
+              </td>
+            </tr>
+            <tr style="display:none;" name="tr-pontos" id="tr-pontos_{{$u2->id}}">
+              <td>&nbsp;</td>
+              <td style="border-top:solid 1px #999;" colspan="2">
+                <div class="btn-group">  
+                  <button class="btn btn-xs btn-success" name="btn-mais" style="width:20px;">+</button>
+                  <button class="btn btn-xs btn-danger" name="btn-menos" style="width:20px;">-</button>
+                </div>
+                <input type="number" name="txtValor" value="0" style="width:45px;">
+                <input type="text" name="txtMotivo" placeholder="Informe o motivo do lançamento" style="width:285px;" maxlength="120">
+                <button class="btn btn-sm btn-primary" name="btn-ok" data-id="{{$u2->id}}">Ok</button>
+                <br /><br />
+              </td>
+              <td colspan="3"></td>
             </tr>
           @endforeach
         </tbody>

@@ -26,17 +26,27 @@ Route::get('/jogos/lista-palpites', 'JogoController@listarPalpites');
 Route::get('/jogos/palpites/salvar', 'JogoController@salvarPalpites');
 Route::get('/jogos/calcula', 'JogoController@calcularPontuacoes');
 
+Route::get('/jogos/bloqueio', 'JogoController@listaOpcoes');
+Route::get('/jogos/mudaBloq/{valor}', 'JogoController@bloquearGeral');
+
 Route::get('/classificacao', 'JogoController@classificacao');
 Route::get('/jogos', 'JogoController@palpites');
 
 //USUARIOS
 Route::get('/usuarios/gerencia', 'UsuarioController@lista');
 Route::get('/usuarios/aprovacao', 'UsuarioController@aprovar');
+Route::get('/usuarios/pontos', 'UsuarioController@lancarPontos');
 Route::get('/usuarios/ativa/{u}/{f}', 'UsuarioController@ativar')->where(['u' => '[0-9]+', 'f' => '[0-1]+']);
 
 //TIMES
 Route::get('/times/cadastro', 'TimeController@lista');
+Route::get('/times/ativacao', 'TimeController@ativar');
 Route::post('/times/upload', 'TimeController@uploadFiles');
+
+//campeonatos
+Route::get('/campeonatos/gerencia', 'CampeonatoController@lista');
+Route::post('/campeonatos/novo', 'CampeonatoController@novo');
+Route::get('/campeonatos/ativacao', 'CampeonatoController@ativar');
 
 //Route::get('home', 'HomeController@index');
 Route::controllers([	

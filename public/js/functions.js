@@ -1,4 +1,5 @@
 $(function(){
+    var _IDtr;
 
   // Salva lançamento de um jogo real
   $("button[name^='jogo_']").click(function(){
@@ -63,16 +64,18 @@ $(function(){
     var j = btn.attr('name').split("_")[1];
 
     pars = { flag: f, jogo: j };
-    //alert(jogo);
     $.ajax({
         type: 'GET',
         url: '/jogos/mudaLiberado',
         data: pars,
         success: function(data){
-          if (f == 1)
+          if (f == 1) {
             btn.prop('class', 'btn btn-xs btn-success glyphicon glyphicon-folder-open').data('liberado', 0).text(' Liberar');
-          else
+            btn.parent().parent('tr').prop('class', 'danger');
+          } else {
             btn.prop('class', 'btn btn-xs btn-warning glyphicon glyphicon-lock').data('liberado', 1).text(' Bloquear');
+            btn.parent().parent('tr').prop('class', 'success');
+          }
         }
     });
   });
@@ -80,12 +83,9 @@ $(function(){
   // Excluir Jogo
   $("button[name^='btnExclui-jogo_']").on("click", function(){
     if (!confirm('Tem certeza que deseja excluir  jogo?')) return false
-    
     var btn = $(this); //botão
     var j = btn.attr('name').split("_")[1];
-
     pars = { jogo: j };
-    //alert(jogo);
     $.ajax({
         type: 'GET',
         url: '/jogos/exclui',
@@ -99,7 +99,7 @@ $(function(){
 
   // Salva palpite
   $("button[name^='palpiteJogo_']").click(function(){
-    var user = 1; // Pegar valor da sessão
+    var user = parseInt($("input[name='hid-user']").val()); // Pegar valor da sessão
     var jogo = $(this).attr('name').split('_')[1]; //ID do jogo
     var pMandante = $("input[name='pMandante"+jogo+"']").val(); //palpite Mandante
     var pVisitante = $("input[name='pVisitante"+jogo+"']").val(); //palpite Visitante
@@ -129,6 +129,7 @@ $(function(){
     });
   })
 
+  //Aprovar cadastro
   $("a[name^='btn-aprova']").click(function(){
     btn = $(this);
     valor = btn.data('valor');
@@ -146,7 +147,134 @@ $(function(){
     });
   });
 
+  //Ativar time
+  $("button[name^='btn-ativar_']").click(function(){
+    btn = $(this);
+    valor = btn.data('valor');
+    id = btn.attr('name').split('_')[1];
 
+    var pars = { v: valor, i: id };
+
+    $.ajax({
+        type: 'GET',
+        url: '/times/ativacao',
+        data: pars,
+        success: function(data){
+          if (data == 1){
+            btn.prop('class', 'btn btn-sm btn-danger').data('valor', 0).text('Desativar');
+            btn.parent().parent('tr').prop('class', 'success');
+          } else {
+            btn.prop('class', 'btn btn-sm btn-success').data('valor', 1).text('Ativar');
+            btn.parent().parent('tr').prop('class', 'danger');
+          }
+        }
+    });
+  });
+
+  //Lançar pontuação extra
+  $("button[name^='btn-pontos_']").click(function(){
+    btn = $(this);
+    id = btn.attr('name').split('_')[1];
+
+    $("tr[name='tr-pontos']").css('display', 'none');
+    $("#tr-pontos_"+id).css('display', 'table-row');
+  });
+
+  // somar 1 a pontuação extra
+  $("button[name='btn-mais']").click(function(){
+    input = $(this).parent().siblings("input[type='number']");
+    valor = parseInt(input.val());
+    valor += 1;
+    input.val(valor);
+  });
+
+  // subtrair 1 a pontuação extra
+  $("button[name='btn-menos']").click(function(){
+    input = $(this).parent().siblings("input[type='number']");
+    valor = parseInt(input.val());
+    valor -= 1;
+    input.val(valor);
+  });
+
+  //soma/subtrai os pontos no cadastro do usuario
+  $("button[name='btn-ok']").click(function(){
+    usuId = $(this).data('id');
+    inputNumber = $(this).siblings("input[type='number']");
+    inputText = $(this).siblings("input[type='text']");
+    valor = parseInt(inputNumber.val());
+    motivo = inputText.val();
+
+    if (valor == 0) {
+      alert("Insira um valor diferente de 0 (zero).");
+      return false;
+    }
+    if (motivo == "") {
+      alert("Descreva o motivo da pontuação extra.");
+      return false;
+    }
+
+    if (!confirm("Confirma o lançamento dos pontos a esse jogador?")) return false;
+
+    var pars = { id: usuId, v: valor, m: motivo };
+    $.ajax({
+        type: 'GET',
+        url: '/usuarios/pontos',
+        data: pars,
+        success: function(data){
+          alert("Pontuação lançada com sucesso!");
+          $("tr[name='tr-pontos']").css('display', 'none');
+          $("input[name='txtValor']").val("0");
+          $("input[name='txtMotivo']").val("");
+        }
+    });
+    
+  });
+
+  // Detalhamento de palpites
+  $("tr[name='tr-detalha-palpites']").click(function(){
+    id = $(this).data('id');
+    $(this).siblings('tr#'+id).slideToggle('slow');
+    if (_IDtr) 
+      $(this).siblings('tr#'+_IDtr).slideUp('fast');
+    _IDtr = id;
+  });
+
+  //Ativar campeonato
+  $("button[name^='btn-ativar-camp_']").click(function(){
+    btn = $(this);
+    valor = btn.data('valor');
+    id = btn.attr('name').split('_')[1];
+
+    var pars = { v: valor, i: id };
+
+    $.ajax({
+        type: 'GET',
+        url: '/campeonatos/ativacao',
+        data: pars,
+        success: function(data){
+          if (data == 1){
+            btn.prop('class', 'btn btn-sm btn-danger').data('valor', 0).text('Desativar');
+            btn.parent().parent('tr').prop('class', 'success');
+          } else {
+            btn.prop('class', 'btn btn-sm btn-success').data('valor', 1).text('Ativar');
+            btn.parent().parent('tr').prop('class', 'danger');
+          }
+        }
+    });
+  });
+
+  // Bloqueia palpites da rodada
+  $("li>a[name='a-bloquear-palpites']").click(function(){
+    if (confirm('Confirma o bloqueio de TODOS os palpites?')){
+      $.ajax({
+        type: 'GET',
+        url: '/jogos/bloqueio',
+        success: function(data){
+          $('location').href = "/jogos/resultados";
+        }
+      });
+    }
+  });
 
 
 

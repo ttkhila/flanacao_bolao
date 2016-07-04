@@ -9,14 +9,24 @@ use Redirect;
 
 class TimeController extends Controller {
 
+    function __construct(){
+        $this->middleware('auth');
+    }
+
 // ******************************************************************
   public function lista() {
+    if (\Auth::user()->adm != 1) // não é ADM
+      return redirect('/classificacao');
+
     $times = DB::select("Select * FROM times ORDER BY nome");
     return view('times.cadastro')->withTimes($times);
   }
 
 // ******************************************************************
-  public function uploadFiles() {
+public function uploadFiles() {
+    if (\Auth::user()->adm != 1) // não é ADM
+      return redirect('/classificacao');
+
     // GET ALL THE INPUT DATA , $_GET,$_POST,$_FILES.
     $input = Input::only('file');
     $nome = Request::input('nome_time');
@@ -24,7 +34,7 @@ class TimeController extends Controller {
     
     // VALIDATION RULES
     $rules = array(
-        'file' => 'image|required|mimes:png,gif,jpg,jpeg|max:300',
+        'file' => 'image|mimes:png,gif,jpg,jpeg|max:300',
     );
 
    // PASS THE INPUT AND RULES INTO THE VALIDATOR
@@ -35,7 +45,10 @@ class TimeController extends Controller {
         return Redirect::to('/times/cadastro')->with('erro', $validation->errors()->first());
     }
     
-       $file = array_get($input,'file');
+   $file = array_get($input,'file');
+
+   if (!empty($file)) { //não enviou imagem
+
        // SET UPLOAD PATH 
         $destinationPath = public_path().'/img/upload'; 
         // GET THE FILE EXTENSION
@@ -53,16 +66,35 @@ class TimeController extends Controller {
         // MOVE THE UPLOADED FILES TO THE DESTINATION DIRECTORY 
         $upload_success = $file->move($destinationPath, $fileName); 
     
-    // IF UPLOAD IS SUCCESSFUL SEND SUCCESS MESSAGE OTHERWISE SEND ERROR MESSAGE
-    if ($upload_success) {
+        // IF UPLOAD IS SUCCESSFUL SEND SUCCESS MESSAGE OTHERWISE SEND ERROR MESSAGE
+        if ($upload_success) {
+            DB::table('times')->insert(
+              ['nome' => $nome, 'nacionalidade' => $nacionalidade, 'arquivo' => $fileName]
+            );
+            return Redirect::to('/times/cadastro')->with('message', 'Time incluído com sucesso!');
+        } 
+    } else {
         DB::table('times')->insert(
-          ['nome' => $nome, 'nacionalidade' => $nacionalidade, 'arquivo' => $fileName]
+          ['nome' => $nome, 'nacionalidade' => $nacionalidade]
         );
         return Redirect::to('/times/cadastro')->with('message', 'Time incluído com sucesso!');
-    } 
+    }
 }
 
+// ******************************************************************
+    public function ativar() {
+        if (\Auth::user()->adm != 1) // não é ADM
+            return redirect('/classificacao');
+            
+        $valor = $_GET['v'];
+        $id = $_GET['i'];
 
+        DB::table('times')
+            ->where('id', $id)
+            ->update(['ativo' => $valor]);
+
+        return $valor;
+    }
 
 
 

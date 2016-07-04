@@ -7,11 +7,14 @@ use Redirect;
 class UsuarioController extends Controller {
 
   function __construct(){
-    # code...
+      $this->middleware('auth');
   }
 
 // ******************************************************************
   public function lista() {
+    if (\Auth::user()->adm != 1) // não é ADM
+      return redirect('/classificacao');
+
     $usu_pend = DB::select("Select * FROM users WHERE inscricao_liberada = 0");
     $usu_total = DB::select("Select * FROM users");
 
@@ -20,6 +23,9 @@ class UsuarioController extends Controller {
 
 // ******************************************************************
   public function aprovar() {
+    if (\Auth::user()->adm != 1) // não é ADM
+      return redirect('/classificacao');
+
     $valor = $_GET['v'];
     $id = $_GET['i'];
 
@@ -44,12 +50,32 @@ class UsuarioController extends Controller {
     }
   }
 
+// ******************************************************************
   public function ativar($u, $f) {
+    if (\Auth::user()->adm != 1) // não é ADM
+      return redirect('/classificacao');
+
     DB::table('users')
       ->where('id', $u)
       ->update(['active' => $f]);
 
     return redirect('/usuarios/gerencia');
+  }
+
+// ******************************************************************
+  public function lancarPontos() {
+    if (\Auth::user()->adm != 1) // não é ADM
+      return redirect('/classificacao');
+      
+    $id = $_GET['id'];
+    $valor = intval($_GET['v']);
+    $motivo = $_GET['m'];
+    $dt = date('Y-m-d');
+
+    DB::table('pontuacoes')->insert(
+      ['usuario_id' => $id, 'pontuacao' => $valor, 'data' => $dt, 'motivo' => $motivo]
+    );
+
   }
 
 
