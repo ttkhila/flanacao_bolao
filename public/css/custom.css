@@ -38,12 +38,12 @@ tr.fla:nth-child(odd){
 
 tr.fla1{
   background-color:#000;
-  color:#f00;
+  color:#fff;
   border:solid 2px #fff;
 }
 tr.fla2{
   background-color:#f00;
-  color:#000;
+  color:#fff;
   border:solid 2px #fff;
 }
 span.sp-inline:nth-child(odd){
