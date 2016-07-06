@@ -57,3 +57,18 @@ span.sp-inline:nth-child(odd){
   width: 60px;
   text-align: center;
 }
+
+
+/* jQuery Countdown styles 2.0.0. */
+.countdown {
+  border: 2px solid #8B4513;
+  background-color: #FFFFE0;
+  text-align: center;
+  font:normal 1.4em "Verdana Arial";
+  padding:5px;
+  margin-bottom: 25px;
+}
+.countdown span {
+  color: #8B4513;
+  font: bold 1.5em "Verdana Arial";
+}

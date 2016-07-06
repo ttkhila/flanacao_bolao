@@ -1,5 +1,27 @@
 $(function(){
-    var _IDtr;
+  var _IDtr;
+
+  //Contador de palpites
+  $('#clock').countdown($('#dia_hora').val()).on('update.countdown', function(event) {
+    var format = '%Hhs : %Mmin : %Sseg';
+    if(event.offset.days > 0) {
+      format = '%-d dia%!d, ' + format;
+    }
+    if(event.offset.weeks > 0) {
+      format = '%-w semana%!w, ' + format;
+    }
+    $(this).html(event.strftime(format));
+  }).on('finish.countdown', function(event) {
+    $.ajax({
+      type: 'GET',
+      url: '/jogos/mudaBloq/0',
+      success: function(){
+        $(this).html('Palpites bloqueados!')
+        .parent().addClass('disabled');
+        window.location = '/';
+      }
+    }); 
+  });
 
   // Salva lançamento de um jogo real
   $("button[name^='jogo_']").click(function(){

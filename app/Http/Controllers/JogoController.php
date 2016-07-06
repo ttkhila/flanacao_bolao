@@ -183,7 +183,13 @@ class JogoController extends Controller {
     //palpites efetuados para o jogo atual
     $pal = DB::select("SELECT p.*, u.login FROM palpites p, users u, jogos j WHERE j.data_jogo = (SELECT min(data_jogo) FROM jogos WHERE liberado = 1) AND (p.usuario_id = u.id) AND (j.id = p.jogo_id) AND (p.palpite_mandante >= 0) ORDER BY j.data_jogo ASC, u.login");
 
-    return view('jogos.palpites')->with(['jogos' => $jogos, 'pal' => $pal]);
+    // Dia e Hora do jogo mais próximo
+    $dia_hora = DB::table('jogos')
+      ->where('liberado', 1)
+      ->orderBy('data_jogo', 'asc')
+      ->first();
+
+    return view('jogos.palpites')->with(['jogos' => $jogos, 'pal' => $pal, 'dia_hora' => $dia_hora]);
   }
 
 // ******************************************************************
@@ -321,7 +327,7 @@ class JogoController extends Controller {
     DB::table('configuracoes')
       ->update(['bloquear_palpites' => $valor]);
 
-    return redirect('/jogos/resultados');
+    return redirect('/classificacao');
   }
 
 

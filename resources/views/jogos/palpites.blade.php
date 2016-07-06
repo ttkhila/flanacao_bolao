@@ -1,10 +1,23 @@
 @extends('layouts.principal')
 
 @section('conteudo')
+
+<?php
+  if ($dia_hora) {
+    $hora_jogo = explode(":", $dia_hora->hora_jogo);
+    $hora_jogo[0] = intval($hora_jogo[0]) - 1;
+    $hora_jogo = implode(":", $hora_jogo);
+    $format = str_replace("-", "/", $dia_hora->data_jogo)." ".$hora_jogo;
+  }
+?>
 <h2>Palpites</h2>
 @if(empty($jogos))
   <center><span class="alert alert-danger">Não existem palpites a serem efetuados. Volte em outro momento.</span></center>
 @else
+  
+  <input type="hidden" id="dia_hora" value="<?php echo $format.':00'; ?>">
+  <div class="countdown">Tempo restante até o bloqueio dos palpites da rodada:<br /><span id="clock"></span></div>
+
   <table class="table table-striped table-responsive">
     <thead>
       <tr>
