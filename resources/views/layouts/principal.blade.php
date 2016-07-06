@@ -54,12 +54,13 @@
 
                   <li role="presentation" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    Cadastros <span class="caret"></span>
+                    ADM <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
                       <li><a href="/times/cadastro">Times</a></li>
                       <li><a href="/usuarios/gerencia">Usuários</a></li>
                       <li><a href="/campeonatos/gerencia">Campeonatos</a></li>
+                      <li><a href="/configuracoes/config">Configurações</a></li>
                     </ul>
                   </li> 
                   <li><a href="/classificacao">Classificação</a></li>

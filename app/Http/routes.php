@@ -48,6 +48,9 @@ Route::get('/campeonatos/gerencia', 'CampeonatoController@lista');
 Route::post('/campeonatos/novo', 'CampeonatoController@novo');
 Route::get('/campeonatos/ativacao', 'CampeonatoController@ativar');
 
+Route::get('/configuracoes/config', 'ConfigController@dados');
+Route::post('/configuracoes/salva', 'ConfigController@salvar');
+
 //Route::get('home', 'HomeController@index');
 Route::controllers([	
   'auth' => 'Auth\AuthController',
