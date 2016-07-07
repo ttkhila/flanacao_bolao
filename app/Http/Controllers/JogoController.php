@@ -1,6 +1,8 @@
 <?php namespace flanacao\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use DateTime;
+use DateTimeZone;
 //use Illuminate\Support\Facades\Auth;
 use Request;
 use Redirect;
@@ -167,14 +169,12 @@ class JogoController extends Controller {
     //verifica se os palpites não estão bloqueados
     $config = DB::table('configuracoes')->first();
     if ($config->bloquear_palpites == 1)
-      return ("Palpites bloqueados no momento.<br />
-        Volte mais tarde!<br /><a href='/'>voltar</a>");
+      return view('jogos.palpites')->with('bloq', "Palpites bloqueados no momento. Volte mais tarde!");
 
     //verifica se o usuário logado está ativo
     $at = DB::table('users')->where('id', $user)->first();
     if ($at->active == 0)
-      return ("Você está impedido de realizar palpites.<br />
-        Entre em contato com o administrador do bolão. <br /><a href='/'>voltar</a>");
+      return view('jogos.palpites')->with('inat', "Você está impedido de realizar palpites.");
     
     $jogos = DB::select("SELECT j.*, t1.nome as mandante, t1.arquivo as escudo1, t2.nome as visitante, t2.arquivo as escudo2, p.palpite_mandante, p.palpite_visitante  
       FROM jogos j, times t1, times t2, palpites p  
@@ -328,6 +328,19 @@ class JogoController extends Controller {
       ->update(['bloquear_palpites' => $valor]);
 
     return redirect('/classificacao');
+  }
+
+  public function sincronizar() {
+/*
+    $UTC = new DateTimeZone("UTC");
+    $newTZ = new DateTimeZone("America/Sao_Paulo");
+    $date = new DateTime(date("M j, Y H:i:s"), $UTC );
+    $date->setTimezone( $newTZ );
+    return $date->format("M j, Y H:i:s 0");
+*/
+
+    $now = new DateTime(); 
+    return $now->format("M j, Y H:i:s +0000")."\n";
   }
 
 

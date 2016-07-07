@@ -1,6 +1,47 @@
 $(function(){
   var _IDtr;
 
+  // ********** Contador palpites - início **********
+  date = new Date($('#dia_hora').val());
+  console.log("BD: "+date);
+  //Contador de palpites
+   $('#clock').countdown({
+    until: new Date($('#dia_hora').val()),
+    serverSync: serverTime,
+    onExpiry: finishTime
+   });
+
+  function serverTime() { 
+    var time = null; 
+    $.ajax({
+      url: '/jogos/sync', 
+      async: false, 
+      dataType: 'text', 
+      success: function(text) { 
+        time = new Date(text); 
+      }, 
+      error: function(http, message, exc) {  
+        time = new Date(); 
+      }
+    }); 
+    console.log("Atual: "+time);
+    return time; 
+  }
+
+  function finishTime() {
+    $('#clock').html('Palpites bloqueados!')
+    .parent().addClass('disabled');
+    $.ajax({
+      type: 'GET',
+      url: '/jogos/mudaBloq/0',
+      success: function(){
+        location.reload();
+      } 
+    }); 
+  }
+ // ********** Contador palpites - fim **********
+ 
+  /*
   //Contador de palpites
   $('#clock').countdown($('#dia_hora').val()).on('update.countdown', function(event) {
     var format = '%Hhs : %Mmin : %Sseg';
@@ -12,16 +53,17 @@ $(function(){
     }
     $(this).html(event.strftime(format));
   }).on('finish.countdown', function(event) {
+    $(this).html('Palpites bloqueados!')
+    .parent().addClass('disabled');
     $.ajax({
       type: 'GET',
       url: '/jogos/mudaBloq/0',
       success: function(){
-        $(this).html('Palpites bloqueados!')
-        .parent().addClass('disabled');
-        window.location = '/';
-      }
+        location.reload();
+      } 
     }); 
   });
+  */
 
   // Salva lançamento de um jogo real
   $("button[name^='jogo_']").click(function(){

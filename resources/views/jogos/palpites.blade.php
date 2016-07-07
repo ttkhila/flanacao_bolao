@@ -3,19 +3,30 @@
 @section('conteudo')
 
 <?php
-  if ($dia_hora) {
+  if (isset($dia_hora)) {
     $hora_jogo = explode(":", $dia_hora->hora_jogo);
     $hora_jogo[0] = intval($hora_jogo[0]) - 1;
     $hora_jogo = implode(":", $hora_jogo);
-    $format = str_replace("-", "/", $dia_hora->data_jogo)." ".$hora_jogo;
+    $format = $dia_hora->data_jogo." ".$hora_jogo;
+    $date = new DateTime($format);
+    $date = $date->format('M j, Y H:i:s -3');
   }
 ?>
 <h2>Palpites</h2>
-@if(empty($jogos))
-  <center><span class="alert alert-danger">Não existem palpites a serem efetuados. Volte em outro momento.</span></center>
+@if(!empty($bloq))
+  <center>
+    <div class="alert alert-danger">{{ $bloq }} <br /><a href="/">Ir para classificação</a></div>
+  </center>
+@elseif(!empty($inat))
+  <center>
+    <div class="alert alert-danger">{{ $inat }}<br />Entre em contato com o administrador do bolão.<br /><a href="/">Ir para classificação</a></div>
+  </center>
+@elseif(empty($jogos))
+  <center>
+    <span class="alert alert-danger">Não existem palpites a serem efetuados. Volte em outro momento.</span>
+  </center>
 @else
-  
-  <input type="hidden" id="dia_hora" value="<?php echo $format.':00'; ?>">
+  <input type="hidden" id="dia_hora" value="<?php echo $date; ?>">
   <div class="countdown">Tempo restante até o bloqueio dos palpites da rodada:<br /><span id="clock"></span></div>
 
   <table class="table table-striped table-responsive">

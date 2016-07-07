@@ -28,6 +28,7 @@ Route::get('/jogos/calcula', 'JogoController@calcularPontuacoes');
 
 Route::get('/jogos/bloqueio', 'JogoController@listaOpcoes');
 Route::get('/jogos/mudaBloq/{valor}', 'JogoController@bloquearGeral');
+Route::resource('/jogos/sync', 'JogoController@sincronizar');
 
 Route::get('/classificacao', 'JogoController@classificacao');
 Route::get('/jogos', 'JogoController@palpites');
