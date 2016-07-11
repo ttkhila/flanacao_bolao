@@ -203,6 +203,10 @@ class JogoController extends Controller {
     $config = DB::table('configuracoes')->first();
     if ($config->bloquear_palpites == 1) return "0";
 
+    // Verifica se o jogo está bloqueado
+    $jog = DB::table('jogos')->where('id', $jogo)->first();
+    if ($jog->liberado == 0) return "0";
+
     $at = DB::table('users')->where('id', $user)->first();
     if ($at->active == 0) return "0";
 
@@ -319,7 +323,7 @@ class JogoController extends Controller {
 
   // ******************************************************************
   public function bloquearGeral($valor) {
-    if (\Auth::user()->adm != 1) // não é ADM
+    if(\Auth::guest())
       return redirect('/classificacao');
 
     if ($valor == 1) $valor = 0;
@@ -331,14 +335,6 @@ class JogoController extends Controller {
   }
 
   public function sincronizar() {
-/*
-    $UTC = new DateTimeZone("UTC");
-    $newTZ = new DateTimeZone("America/Sao_Paulo");
-    $date = new DateTime(date("M j, Y H:i:s"), $UTC );
-    $date->setTimezone( $newTZ );
-    return $date->format("M j, Y H:i:s 0");
-*/
-
     $now = new DateTime(); 
     return $now->format("M j, Y H:i:s +0000")."\n";
   }

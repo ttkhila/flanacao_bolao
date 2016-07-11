@@ -8,6 +8,8 @@ $(function(){
    $('#clock').countdown({
     until: new Date($('#dia_hora').val()),
     serverSync: serverTime,
+    layout: '{dn} {dl} : {hn} {hl} : {mn} {ml} : {sn} {sl}',
+    alwaysExpire: true,
     onExpiry: finishTime
    });
 
@@ -40,30 +42,6 @@ $(function(){
     }); 
   }
  // ********** Contador palpites - fim **********
- 
-  /*
-  //Contador de palpites
-  $('#clock').countdown($('#dia_hora').val()).on('update.countdown', function(event) {
-    var format = '%Hhs : %Mmin : %Sseg';
-    if(event.offset.days > 0) {
-      format = '%-d dia%!d, ' + format;
-    }
-    if(event.offset.weeks > 0) {
-      format = '%-w semana%!w, ' + format;
-    }
-    $(this).html(event.strftime(format));
-  }).on('finish.countdown', function(event) {
-    $(this).html('Palpites bloqueados!')
-    .parent().addClass('disabled');
-    $.ajax({
-      type: 'GET',
-      url: '/jogos/mudaBloq/0',
-      success: function(){
-        location.reload();
-      } 
-    }); 
-  });
-  */
 
   // Salva lançamento de um jogo real
   $("button[name^='jogo_']").click(function(){
