@@ -181,7 +181,7 @@ class JogoController extends Controller {
       WHERE (t1.id = j.time1_id) AND (t2.id = j.time2_id) AND (j.liberado = 1) AND (p.jogo_id = j.id) AND (p.usuario_id = $user) ORDER BY j.data_jogo");
 
     //palpites efetuados para o jogo atual
-    $pal = DB::select("SELECT p.*, u.login FROM palpites p, users u, jogos j WHERE j.data_jogo = (SELECT min(data_jogo) FROM jogos WHERE liberado = 1) AND (p.usuario_id = u.id) AND (j.id = p.jogo_id) AND (p.palpite_mandante >= 0) ORDER BY j.data_jogo ASC, u.login");
+    $pal = $this->getJogo_mais_recente();
 
     // Dia e Hora do jogo mais próximo
     $dia_hora = DB::table('jogos')
@@ -191,7 +191,19 @@ class JogoController extends Controller {
 
     return view('jogos.palpites')->with(['jogos' => $jogos, 'pal' => $pal, 'dia_hora' => $dia_hora]);
   }
+// ******************************************************************
+  public function visualizarPalpites() {
+    if (\Auth::user()->adm != 1) // não é ADM
+      return redirect('/classificacao');
 
+    $pal = $this->getJogo_mais_recente();
+    return view('jogos.visualiza')->withPal($pal);
+  }
+// ******************************************************************
+  private function getJogo_mais_recente() {
+    $dados = DB::select("SELECT p.*, u.login, t1.nome as mandante, t2.nome as visitante, j.data_jogo, j.hora_jogo FROM palpites p, users u, jogos j, times t1, times t2 WHERE j.data_jogo = (SELECT min(data_jogo) FROM jogos WHERE liberado = 1) AND (p.usuario_id = u.id) AND (j.id = p.jogo_id) AND (p.palpite_mandante >= 0) AND (j.time1_id = t1.id) AND (j.time2_id = t2.id) ORDER BY j.data_jogo ASC, u.login");
+    return $dados;
+  }
 // ******************************************************************
   public function salvarPalpites() {
     $jogo = $_GET['j'];
@@ -279,34 +291,34 @@ class JogoController extends Controller {
 // ******************************************************************
   public function classificacao() {
     $pontuacoes = DB::select("SELECT * FROM pontuacoes"); 
-    $clas = DB::select("SELECT SUM(p.pontuacao) as pontuacao, p.usuario_id, u.name, u.login FROM palpites p, users u WHERE (u.id = p.usuario_id) GROUP BY usuario_id ORDER BY pontuacao DESC");
+    $clas = DB::select("SELECT SUM(p.pontuacao) as pontuacao, p.usuario_id, u.name, u.login FROM palpites p, users u WHERE (u.id = p.usuario_id) AND (u.active = 1) GROUP BY usuario_id ORDER BY pontuacao DESC");
 
     $ids = array();
     $extras = array();
     // soma a pontuação extra a pontuação normal
     //if (!empty($pontuacoes)) { // verifica se a tabela 'pontuacoes' está vazia
-      foreach ($clas as $reg) {
-        $id = $reg->usuario_id;
-        $pont = DB::select("SELECT sum(pontuacao) as p FROM pontuacoes 
-          WHERE usuario_id = $id");
-          foreach ($pont as $value) { 
-            if ($value->p != 'NULL')
-              $reg->pontuacao += ($value->p); 
-          }   
+    foreach ($clas as $reg) {
+      $id = $reg->usuario_id;
+      $pont = DB::select("SELECT sum(pontuacao) as p FROM pontuacoes 
+        WHERE usuario_id = $id");
+        foreach ($pont as $value) { 
+          if ($value->p != 'NULL')
+            $reg->pontuacao += ($value->p); 
+        }   
 
-        //carrega os detalhamentos dos palpites
-        $ids[$id] = DB::select("SELECT t1.nome as mandante, t2.nome as visitante, j.placar1, j.placar2, p.palpite_mandante, p.palpite_visitante, p.pontuacao 
-          FROM times t1, times t2, palpites p, jogos j 
-          WHERE (t1.id = j.time1_id) AND (t2.id = j.time2_id) AND (p.jogo_id = j.id) AND 
-          (p.usuario_id = $id) AND (j.placar1 >= 0) AND (p.palpite_mandante >= 0) 
-          ORDER BY j.data_jogo DESC");
+      //carrega os detalhamentos dos palpites
+      $ids[$id] = DB::select("SELECT t1.nome as mandante, t2.nome as visitante, j.placar1, j.placar2, p.palpite_mandante, p.palpite_visitante, p.pontuacao 
+        FROM times t1, times t2, palpites p, jogos j 
+        WHERE (t1.id = j.time1_id) AND (t2.id = j.time2_id) AND (p.jogo_id = j.id) AND 
+        (p.usuario_id = $id) AND (j.placar1 >= 0) AND (p.palpite_mandante >= 0) 
+        ORDER BY j.data_jogo DESC");
 
-        $extras[$id] = DB::select("SELECT * FROM pontuacoes WHERE usuario_id = $id");
-      }
+      $extras[$id] = DB::select("SELECT * FROM pontuacoes WHERE usuario_id = $id");
+    }
 
-      usort($clas, function($a, $b) {
-        return strcmp($b->pontuacao, $a->pontuacao);
-      });
+    usort($clas, function($a, $b) {
+      return strcmp($b->pontuacao, $a->pontuacao);
+    });
     //}
 
     return view('classificacao', ['clas' => $clas, 'ids' => $ids, 'extras' => $extras]);

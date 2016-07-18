@@ -46,6 +46,7 @@
     </thead>
     <tbody>
       <?php $cont = 1; ?>
+
       @foreach($jogos as $j)
         <tr>
           <td>{{ date('d/m/Y', strtotime($j->data_jogo)) }}</td>

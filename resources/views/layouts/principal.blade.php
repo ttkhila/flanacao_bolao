@@ -48,6 +48,7 @@
                       <li><a href="/jogos/resultados">Lançar Resultados</a></li>
                       <li><a href="/jogos/cadastro">Cadastro de Jogos</a></li>
                       <li><a href="/jogos/lista-palpites">Efetuar Palpites</a></li>
+                      <li><a href="/jogos/visualiza-palpites">Visualizar Palpites</a></li>
                       <li><a href="/jogos/bloqueio">Bloquear/Desbloquear Palpites</a></li>
                     </ul>
                   </li>

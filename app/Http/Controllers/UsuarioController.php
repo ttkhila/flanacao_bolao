@@ -16,7 +16,7 @@ class UsuarioController extends Controller {
       return redirect('/classificacao');
 
     $usu_pend = DB::select("Select * FROM users WHERE inscricao_liberada = 0 ORDER BY login");
-    $usu_total = DB::select("Select * FROM users ORDER BY login");
+    $usu_total = DB::select("Select * FROM users WHERE inscricao_liberada = 1 ORDER BY login");
 
     return view('usuarios.gerencia')->with(['usu_pend' => $usu_pend, 'usu_total' => $usu_total]);
   }

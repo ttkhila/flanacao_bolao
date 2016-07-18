@@ -9,8 +9,8 @@ $(function(){
     until: new Date($('#dia_hora').val()),
     serverSync: serverTime,
     layout: '{dn} {dl} : {hn} {hl} : {mn} {ml} : {sn} {sl}',
-    alwaysExpire: true,
-    onExpiry: finishTime
+    //alwaysExpire: true,
+    //onExpiry: finishTime
    });
 
   function serverTime() { 
@@ -30,6 +30,7 @@ $(function(){
     return time; 
   }
 
+  /*
   function finishTime() {
     $('#clock').html('Palpites bloqueados!')
     .parent().addClass('disabled');
@@ -41,6 +42,7 @@ $(function(){
       } 
     }); 
   }
+  */
  // ********** Contador palpites - fim **********
 
   // Salva lançamento de um jogo real

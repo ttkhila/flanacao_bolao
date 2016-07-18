@@ -1,3 +1,7 @@
+.table-nonfluid {
+   width: 55% !important;
+}
+
 nav.navbar.navbar-default{
   background-color: #000;
   border-color: #f00;

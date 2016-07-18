@@ -23,6 +23,7 @@ Route::get('/jogos/exclui', 'JogoController@excluir');
 Route::get('/jogos/mudaLiberado', 'JogoController@mudarLiberado');
 
 Route::get('/jogos/lista-palpites', 'JogoController@listarPalpites');
+Route::get('/jogos/visualiza-palpites', 'JogoController@visualizarPalpites');
 Route::get('/jogos/palpites/salvar', 'JogoController@salvarPalpites');
 Route::get('/jogos/calcula', 'JogoController@calcularPontuacoes');
 
