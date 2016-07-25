@@ -39,6 +39,15 @@ class JogoController extends Controller {
     DB::table('jogos')
             ->where('id', $jogo)
             ->update(['placar1' => $pMandante, 'placar2' => $pVisitante, 'liberado' => 0]);
+
+    //Grava LOG
+    $file = fopen('l.txt', "a");
+    $user = \Auth::user()->login;
+    date_default_timezone_set('America/Sao_Paulo');
+    $dt = date('d / m / Y - H : i : s');
+    $txt = "$dt - Usuario $user lançou resultado para o jogo $jogo. Placar: $pMandante x $pVisitante".PHP_EOL;
+    fwrite($file, $txt);
+    fclose($file);
     
     echo "1";
     exit;
@@ -150,6 +159,16 @@ class JogoController extends Controller {
     DB::table('jogos')
       ->where('id', $jogo)
       ->update(['liberado' => $flag]);
+
+    //Grava LOG
+    $file = fopen('l.txt', "a");
+    $user = \Auth::user()->login;
+    date_default_timezone_set('America/Sao_Paulo');
+    $dt = date('d / m / Y - H : i : s');
+    $flag = ($flag == 1) ? "LIBERADO" : "BLOQUEADO";
+    $txt = "$dt - Usuario $user alterou o jogo $jogo para $flag.".PHP_EOL;
+    fwrite($file, $txt);
+    fclose($file);
   }
 
 // ******************************************************************
@@ -160,6 +179,15 @@ class JogoController extends Controller {
     $jogo = $_GET['jogo'];
     DB::table('jogos')->where('id', '=', $jogo)->delete();
     DB::table('palpites')->where('jogo_id', '=', $jogo)->delete();
+
+    //Grava LOG
+    $file = fopen('l.txt', "a");
+    $user = \Auth::user()->login;
+    date_default_timezone_set('America/Sao_Paulo');
+    $dt = date('d / m / Y - H : i : s');
+    $txt = "$dt - Usuario $user excluiu o jogo $jogo.".PHP_EOL;
+    fwrite($file, $txt);
+    fclose($file);
   }
 
 // ******************************************************************
@@ -227,6 +255,16 @@ class JogoController extends Controller {
     DB::table('palpites')
             ->where(['jogo_id' => $jogo, 'usuario_id' => $user])
             ->update(['palpite_mandante' => $pMandante, 'palpite_visitante' => $pVisitante]);
+
+    //Grava LOG
+    $file = fopen('l.txt', "a");
+    $user = \Auth::user()->login;
+    date_default_timezone_set('America/Sao_Paulo');
+    $dt = date('d / m / Y - H : i : s');
+    $txt = "$dt - Usuario $user efetuou palpites para o jogo $jogo. Placar $pMandante x $pVisitante".PHP_EOL;
+    fwrite($file, $txt);
+    fclose($file);
+
     echo "1";
     exit;
   }
@@ -284,6 +322,16 @@ class JogoController extends Controller {
             ->where('id', $id)
             ->update(['pontuacao' => $pontos]);
       }
+
+      //Grava LOG
+      $file = fopen('l.txt', "a");
+      $user = \Auth::user()->login;
+      date_default_timezone_set('America/Sao_Paulo');
+      $dt = date('d / m / Y - H : i : s');
+      $txt = "$dt - Usuario $user executou o cálculo das pontuações.".PHP_EOL;
+      fwrite($file, $txt);
+      fclose($file);
+
       return redirect('/classificacao');
     }
   }
@@ -343,6 +391,16 @@ class JogoController extends Controller {
     DB::table('configuracoes')
       ->update(['bloquear_palpites' => $valor]);
 
+    //Grava LOG
+    $file = fopen('l.txt', "a");
+    $user = \Auth::user()->login;
+    date_default_timezone_set('America/Sao_Paulo');
+    $dt = date('d / m / Y - H : i : s');
+    $valor = ($valor == 1) ? "BLOQUEOU" : "LIBEROU";
+    $txt = "$dt - Usuario $user $valor todos os palpites.".PHP_EOL;
+    fwrite($file, $txt);
+    fclose($file);
+
     return redirect('/classificacao');
   }
 
@@ -350,9 +408,6 @@ class JogoController extends Controller {
     $now = new DateTime(); 
     return $now->format("M j, Y H:i:s +0000")."\n";
   }
-
-
-
 
 
 }
